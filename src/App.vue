@@ -10,10 +10,8 @@
       />
       <div>
         <nav>
-          <div v-if="currentUser">
-            <h1 @click.prevent="logOut" class="p-2">
-              <font-awesome-icon icon="sign-out-alt" /> LogOut
-            </h1>
+          <div v-if="currentUser" @click.prevent="logOut">
+            <h1 class="p-2">LogOut</h1>
           </div>
           <RouterLink class="p-2" to="/">Home</RouterLink>
           <RouterLink class="p-2" to="/register">Register</RouterLink>
