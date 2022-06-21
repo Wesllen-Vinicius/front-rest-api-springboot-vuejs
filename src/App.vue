@@ -1,129 +1,63 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "@/components/HelloWorld.vue";
-</script>
-
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="SpringBoot VUEJS" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/register">Register</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
-        <RouterLink to="/profile">Profile</RouterLink>
-      </nav>
+  <div class="sticky top-0 z-50 bg-gray-200 p-2">
+    <div class="flex items-center justify-center">
+      <img
+        alt="Vue logo"
+        class="w-14"
+        src="@/assets/logo.svg"
+        width="125"
+        height="125"
+      />
+      <div>
+        <nav>
+          <div v-if="currentUser">
+            <li>
+              <router-link to="/profile">
+                {{ currentUser.username }}
+              </router-link>
+            </li>
+            <li class="w-auto">
+              <a @click.prevent="logOut">
+                <font-awesome-icon icon="sign-out-alt" /> LogOut
+              </a>
+            </li>
+          </div>
+          <RouterLink class="p-2" to="/">Home</RouterLink>
+          <RouterLink class="p-2" to="/register">Register</RouterLink>
+          <RouterLink class="p-2" to="/login">Login</RouterLink>
+          <RouterLink class="p-2" to="/profile">Profile</RouterLink>
+          <li v-if="showAdminBoard" class="p-2">
+            <router-link to="/admin" class="nav-link">Admin Board</router-link>
+          </li>
+          <router-link v-if="currentUser" to="/user" class="p-2"
+            >User</router-link
+          >
+        </nav>
+      </div>
     </div>
-  </header>
+  </div>
 
   <RouterView />
 </template>
 
-<style>
-@import "@/assets/base.css";
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
-}
-
-header {
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
+<script>
+export default {
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+    showAdminBoard() {
+      if (this.currentUser && this.currentUser["roles"]) {
+        return this.currentUser["roles"].includes("ROLE_ADMIN");
+      }
+      return false;
+    },
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/login");
+    },
+  },
+};
+</script>

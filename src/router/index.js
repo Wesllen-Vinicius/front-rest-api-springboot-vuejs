@@ -22,6 +22,16 @@ const router = createRouter({
       component: () => import("../views/Registerview.vue"),
     },
     {
+      path: "/admin",
+      name: "admin",
+      component: () => import("../views/BoardAdmin.vue"),
+    },
+    {
+      path: "/user",
+      name: "user",
+      component: () => import("../views/BoardUser.vue"),
+    },
+    {
       path: "/profile",
       name: "profile",
       component: () => import("../views/ProfileView.vue"),
@@ -31,3 +41,14 @@ const router = createRouter({
 });
 
 export default router;
+
+router.beforeEach((to, _from, next) => {
+  const publicPages = ["/login", "/register", "/home"];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem("user");
+  if (authRequired && !loggedIn) {
+    next("/login");
+  } else {
+    next();
+  }
+});
