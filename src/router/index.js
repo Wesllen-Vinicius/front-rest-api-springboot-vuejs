@@ -26,6 +26,7 @@ const router = createRouter({
       name: "admin",
       component: () => import("../views/BoardAdmin.vue"),
     },
+
     {
       path: "/user",
       name: "user",
@@ -36,6 +37,11 @@ const router = createRouter({
       name: "profile",
       component: () => import("../views/ProfileView.vue"),
     },
+    {
+      path: "/unauthorized",
+      name: "unauthorized",
+      component: () => import("../components/NotAuthorized.vue"),
+    },
     { path: "/:catchAll(.*)", component: NotFound },
   ],
 });
@@ -43,12 +49,18 @@ const router = createRouter({
 export default router;
 
 router.beforeEach((to, _from, next) => {
-  const publicPages = ["/login", "/register", "/home"];
+  const publicPages = ["/login", "/register", "/home", "/admin"];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem("user");
+  const userData = JSON.parse(loggedIn);
+  const isAdmin = userData?.roles.includes("ROLE_ADMIN");
+
   if (authRequired && !loggedIn) {
     next("/login");
   } else {
+    if (["/admin"].includes(to.path) && !isAdmin) {
+      next("/unauthorized");
+    }
     next();
   }
 });

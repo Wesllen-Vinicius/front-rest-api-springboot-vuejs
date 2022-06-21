@@ -151,7 +151,6 @@ export default {
   methods: {
     ...mapActions(["register"]),
     handleRegister(user) {
-      console.log(user);
       this.message = "";
       this.successful = false;
       this.loading = true;
