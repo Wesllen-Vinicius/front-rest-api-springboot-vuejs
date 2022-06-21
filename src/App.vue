@@ -11,26 +11,19 @@
       <div>
         <nav>
           <div v-if="currentUser">
-            <li>
-              <router-link to="/profile">
-                {{ currentUser.username }}
-              </router-link>
-            </li>
-            <li class="w-auto">
-              <a @click.prevent="logOut">
-                <font-awesome-icon icon="sign-out-alt" /> LogOut
-              </a>
-            </li>
+            <h1 @click.prevent="logOut" class="p-2">
+              <font-awesome-icon icon="sign-out-alt" /> LogOut
+            </h1>
           </div>
           <RouterLink class="p-2" to="/">Home</RouterLink>
           <RouterLink class="p-2" to="/register">Register</RouterLink>
           <RouterLink class="p-2" to="/login">Login</RouterLink>
           <RouterLink class="p-2" to="/profile">Profile</RouterLink>
-          <li v-if="showAdminBoard" class="p-2">
-            <router-link to="/admin" class="nav-link">Admin Board</router-link>
-          </li>
-          <router-link v-if="currentUser" to="/user" class="p-2"
-            >User</router-link
+          <a v-if="showAdminBoard" class="p-2">
+            <RouterLink to="/admin" class="nav-link">Admin Board</RouterLink>
+          </a>
+          <RouterLink v-if="currentUser" to="/user" class="p-2"
+            >User</RouterLink
           >
         </nav>
       </div>
