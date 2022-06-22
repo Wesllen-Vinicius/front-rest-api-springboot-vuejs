@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   computed: {
     currentUser() {
@@ -45,8 +46,9 @@ export default {
     },
   },
   methods: {
-    logOut() {
-      this.$store.dispatch("auth/logout");
+    ...mapActions(["logout"]),
+    async logOut() {
+      await this.logout();
       this.$router.push("/login");
     },
   },

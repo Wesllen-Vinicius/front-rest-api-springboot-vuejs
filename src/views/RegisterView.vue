@@ -151,27 +151,19 @@ export default {
   methods: {
     ...mapActions(["register"]),
     handleRegister(user) {
-      this.message = "";
-      this.successful = false;
-      this.loading = true;
-      this.register(user).then(
-        (data) => {
+      try {
+        this.message = "";
+        this.successful = false;
+        this.loading = true;
+        this.register(user).then((data) => {
           this.message = data.message;
           this.successful = true;
           this.loading = false;
-        },
-
-        (error) => {
-          this.message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          this.successful = false;
-          this.loading = false;
-        }
-      );
+        });
+      } catch (error) {
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };

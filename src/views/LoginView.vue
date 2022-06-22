@@ -44,6 +44,7 @@
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Password"
             />
+            <v-error-message name="password" />
           </div>
         </div>
 
@@ -102,6 +103,7 @@
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { mapActions } from "vuex";
+
 export default {
   name: "Login",
   components: {
@@ -131,24 +133,17 @@ export default {
     }
   },
   methods: {
-    // ...mapActions(["login"]),
-    handleLogin(user) {
-    console.log(user)
-    this.loading = true;
-       this.$store.dispatch("auth/login", user).then(
-        () => {
-          this.$router.push("/profile");
-        },
-        (error) => {
-          this.loading = false;
-          this.message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-        }
-      );
+    ...mapActions(["login"]),
+    async handleLogin(user) {
+      try {
+        this.message = "";
+        this.loading = true;
+        await this.login(user);
+        this.$router.push("/profile");
+      } catch (error) {
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };
