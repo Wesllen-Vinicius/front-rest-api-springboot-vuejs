@@ -13,6 +13,10 @@ class UserService {
   getAdminBoard() {
     return api.get("test/admin", { headers: authHeader() });
   }
+
+  getUsers(){
+    return api.get("get/user", {headers: authHeader() });
+  }
 }
 
-export default new UserService();
+export const userService = new UserService();

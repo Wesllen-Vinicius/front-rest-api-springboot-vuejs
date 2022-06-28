@@ -91,11 +91,13 @@
     </div>
   </div>
 </template>
+
+
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { mapActions } from "vuex";
 import * as yup from "yup";
-import UserService from "../services/user.service";
+import {userService} from "../services/user.service";
 import TableUsers from "../components/TableUsers.vue";
 export default {
   name: "Admin",
@@ -132,7 +134,7 @@ export default {
     };
   },
   mounted() {
-    UserService.getAdminBoard().then(
+    userService.getAdminBoard().then(
       (response) => {
         this.content = response.data;
       },
